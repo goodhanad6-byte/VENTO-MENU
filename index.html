@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vento Cafe & Restaurant - Menu</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Tajawal:wght@400;500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            DEFAULT: '#D4AF37',
+                            light: '#F3E5AB',
+                            dark: '#AA7C11'
+                        },
+                        darkbg: '#0F0F11',
+                        cardbg: '#18181C',
+                        bordergold: 'rgba(212, 175, 55, 0.3)'
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Poppins', 'sans-serif'],
+                        arabic: ['Tajawal', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0F0F11;
+            color: #F3F3F3;
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #AA7C11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen pb-12 selection:bg-gold selection:text-black">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-darkbg/95 backdrop-blur-md border-b border-gold-border px-4 py-3 shadow-lg">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                <i class="fa-solid fa-utensils text-gold text-xl"></i>
+                <span class="font-serif font-bold text-xl tracking-wider gold-gradient-text">VENTO</span>
+            </div>
+            
+            <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                <!-- Language Toggle -->
+                <button id="lang-toggle-btn" onclick="toggleLanguage()" class="text-xs bg-cardbg border border-gold-border px-3 py-1.5 rounded-full text-gold hover:bg-gold hover:text-black transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i>
+                    <span id="lang-btn-text">عربي</span>
+                </button>
+
+                <!-- Owner Mode Toggle -->
+                <button id="owner-toggle-btn" onclick="toggleOwnerMode()" class="text-xs bg-gold/10 border border-gold-border px-3 py-1.5 rounded-full text-gold hover:bg-gold hover:text-black transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-lock" id="owner-lock-icon"></i>
+                    <span id="owner-btn-text">Owner Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-4">
+
+        <!-- Restaurant Header Card -->
+        <div class="bg-cardbg rounded-2xl p-6 mb-6 text-center gold-border shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent"></div>
+            
+            <h1 class="font-serif text-3xl md:text-4xl font-bold tracking-wider gold-gradient-text mb-1">VENTO</h1>
+            <p class="text-xs uppercase tracking-widest text-gray-400 mb-4 font-serif">Café & Restaurant</p>
+
+            <!-- Wi-Fi Details Card -->
+            <div class="inline-flex items-center gap-3 bg-black/50 border border-gold-border px-4 py-2 rounded-xl text-sm max-w-full">
+                <i class="fa-solid fa-wifi text-gold text-base"></i>
+                <div class="text-left rtl:text-right text-xs">
+                    <div><span class="text-gray-400">Wi-Fi:</span> <strong class="text-white">Vento</strong></div>
+                    <div><span class="text-gray-400">Pass:</span> <strong class="text-gold tracking-widest">12345678</strong></div>
+                </div>
+                <button onclick="copyWifi()" class="ml-2 rtl:mr-2 text-gray-400 hover:text-gold transition" title="Copy Password">
+                    <i class="fa-regular fa-copy"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Admin Control Bar (Only Visible in Owner Mode) -->
+        <div id="admin-bar" class="hidden mb-6 p-4 bg-red-950/30 border border-red-500/40 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-red-400 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield"></i> Admin Panel Active
+                </span>
+                <button onclick="openAddModal()" class="bg-gold text-black px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-gold-light transition">
+                    + Add New Dish
+                </button>
+            </div>
+            <div class="pt-2 border-t border-red-500/20 flex justify-between items-center">
+                <p class="text-xs text-gray-400">Made a mistake? Reset your entire menu to defaults.</p>
+                <button onclick="clearAllData()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-semibold transition">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Delete Entire Menu
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative mb-6">
+            <i class="fa-solid fa-magnifying-glass absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" id="search-input" onkeyup="filterMenu()" placeholder="Search dishes, drinks, shisha..." 
+                class="w-full pl-11 rtl:pl-4 rtl:pr-11 pr-4 py-3 bg-cardbg rounded-xl border border-gold-border text-sm text-white placeholder-gray-500 focus:outline-none focus:border-gold transition">
+        </div>
+
+        <!-- Category Horizontal Filter Tabs -->
+        <div class="flex space-x-2 rtl:space-x-reverse overflow-x-auto hide-scrollbar mb-6 pb-2" id="category-tabs">
+            <!-- Tabs dynamically rendered here -->
+        </div>
+
+        <!-- Menu Items List -->
+        <div id="menu-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Items rendered dynamically -->
+        </div>
+
+    </main>
+
+    <!-- Modal: Add / Edit Item -->
+    <div id="item-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-cardbg border border-gold-border rounded-2xl w-full max-w-md p-6 relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 rtl:right-auto rtl:left-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 id="modal-title" class="font-serif text-xl font-bold gold-gradient-text mb-4">Add Menu Item</h3>
+            
+            <form id="item-form" onsubmit="handleSaveItem(event)" class="space-y-3">
+                <input type="hidden" id="edit-item-id">
+                
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Category</label>
+                    <select id="item-category" required class="w-full bg-black/50 border border-gold-border rounded-lg p-2.5 text-sm text-white focus:outline-none">
+                        <!-- Rendered dynamically -->
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs text-gray-400 block mb-1">Title (English)</label>
+                        <input type="text" id="item-title-en" required class="w-full bg-black/50 border border-gold-border rounded-lg p-2.5 text-sm text-white focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400 block mb-1">Title (Arabic)</label>
+                        <input type="text" id="item-title-ar" required class="w-full bg-black/50 border border-gold-border rounded-lg p-2.5 text-sm text-white focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Price (EGP)</label>
+                    <input type="number" id="item-price" required min="0" step="1" class="w-full bg-black/50 border border-gold-border rounded-lg p-2.5 text-sm text-white focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs text-gray-400 block mb-1">Description (English)</label>
+                        <textarea id="item-desc-en" rows="2" class="w-full bg-black/50 border border-gold-border rounded-lg p-2.5 text-sm text-white focus:outline-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400 block mb-1">Description (Arabic)</label>
+                        <textarea id="item-desc-ar" rows="2" class="w-full bg-black/50 border border-gold-border rounded-lg p-2.5 text-sm text-white focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-400 block mb-1">Image URL</label>
+                    <input type="url" id="item-image" placeholder="https://..." class="w-full bg-black/50 border border-gold-border rounded-lg p-2.5 text-sm text-white focus:outline-none">
+                </div>
+
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-lg text-xs bg-gray-700 hover:bg-gray-600">Cancel</button>
+                    <button type="submit" class="px-4 py-2 rounded-lg text-xs bg-gold text-black font-bold hover:bg-gold-light">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        const DEFAULT_PIN = "1234";
+        let isOwnerMode = false;
+        let currentLang = 'en'; // 'en' or 'ar'
+        let selectedCategory = 'all';
+
+        const
